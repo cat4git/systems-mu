@@ -12,16 +12,10 @@ import { listStyles } from './list.style'
 import ListSubheader from '@material-ui/core/ListSubheader'
 import ListItem from '@material-ui/core/ListItem'
 import ListItemText from '@material-ui/core/ListItemText'
+import { getSystemInfo } from '../lib/system';
 
 export default function Home({
-  allPostsData
-}: {
-  allPostsData: {
-    date: string
-    title: string
-    id: string
-  }[]
-}) {
+  allPostsData}) {
   const classes = listStyles();
 
   return (
@@ -46,17 +40,21 @@ export default function Home({
           ))}
         </ul> */}
         <List className={classes.root} subheader={<li />}>
-        {data["data"].map((parent) => (
+        {allPostsData.map((parent) => (
           <li key={`item-${parent}`} className={classes.listSection}>
             <ul className={classes.ul}>
-            <ListItemText  className={classes.parent}>
-              <Link href="/posts/[id]" as={`/posts/${parent.type.name.toLowerCase}`}>
-                <a>{`${parent.name} (${parent.type.name}) ${parent.status}`}</a>
+            <ListItemText  >
+              <Link href="/posts/[id]" as={`/posts/${parent.type.name.toLowerCase().replace(" ","-")}`}>
+                <a >{`${parent.name} (${parent.type.name}) ${parent.status}`}</a>
               </Link>
               </ListItemText>
               {parent.children && parent.children.map((chuldren) => (
                 <ListItem key={`item-${parent}-${chuldren}`}>
-                  <ListItemText className={classes.chuldren} primary={`${chuldren.name} (${chuldren.type.name}) ${chuldren.status}`} />
+                  <ListItemText >
+                    <Link href="/posts/[id]" as={`/posts/${parent.type.name.toLowerCase().replace(" ","-")}`}>
+                      <a >{`${chuldren.name} (${chuldren.type.name}) ${chuldren.status}`}</a>
+                    </Link>
+                  </ListItemText>
                 </ListItem>
               ))}
             </ul>
@@ -69,7 +67,7 @@ export default function Home({
 }
 
 export const getStaticProps: GetStaticProps = async () => {
-  const allPostsData = getSortedPostsData()
+  const allPostsData = getSystemInfo()
   return {
     props: {
       allPostsData
