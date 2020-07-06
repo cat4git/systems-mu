@@ -13,7 +13,7 @@
 
     const data= await import( `../mock/charts/${id}.json`)
     const a=data.series
-    // a[0].id =id
+    a[0].id =id
     console.log(a)
     return a
     
